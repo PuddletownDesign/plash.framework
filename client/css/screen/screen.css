@@ -1,0 +1,346 @@
+html {background-color: #FFF;}
+body {line-height:1.5;}
+html,body,div,span,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,code,del,dfn,img,dl,dt,dd,ol,ul,li,fieldset,form,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;font-weight:normal;font-style:normal;font-size:100%;font-family:inherit;vertical-align:baseline;}
+input,textarea,select{font-family:inherit;font-size:inherit;font-weight:inherit;}
+table {border-collapse:separate;border-spacing:0;}
+caption,th,td {text-align:left;font-weight:normal;}
+table,td,th {vertical-align:middle;}
+a img,img,fieldset,abbr,acronym {border:none;}
+a:focus {outline:none;}
+pre,code{ font:115% monospace; }
+blockquote:before,q:before{content:'';}
+blockquote:after,q:after{content:'';}
+ol, ul {padding-left:1.5em;}
+/* em, strong{font-style:normal;font-weight:400;} */
+/* br, hr {display: none;} */
+html {
+	background: url(graphics/bgnoise_lg.jpg);
+}
+body {
+	font-family: Helvetica, Arial, Verdana, sans-serif;
+	font-size: 100%;
+	/* background: url(graphics/14.gif); */
+}
+h1 {
+	font-size: 2.5em;
+	line-height: 1.255em;
+	padding-bottom: .331em;
+/* 	padding-bottom: .94em; */
+	padding-top: .31em;
+}
+h2 {
+	font-size:1.8em;
+	line-height: 1.33em;
+	padding-bottom: .06em;
+}
+h3 {
+	font-size:1.4em;
+	line-height: 1.57em;
+	padding-top: 1.57em;
+
+}
+h4, h5, h6 {
+	font-size:1em;
+	line-height: 1.57em;
+	padding-top: 1.57em;
+	font-weight: bold;
+}
+p, ul ,ol ,dl, pre { 
+	font-size:1em;
+	line-height: 1.57em;
+	padding-bottom: 1.2em;
+	padding-top: .47em;
+/* 	padding-top: 1.97em; */
+}
+pre {
+	margin: 1em 0 1.4em;	
+}
+blockquote {
+	margin: .47em 0 1.2em;
+	padding:0 10px 0 60px;
+	color: #000;
+	border: 1px solid #000;
+	border-left: 10px solid #000;
+	background: #fff url(graphics/blockquote.gif) no-repeat;
+	background-position: 10px 10px;		
+}
+hr {
+	border: 0px;
+	border-bottom: 1px solid #999;
+}
+.error {
+	color: red;
+	font-weight: bold;	
+}
+html, body {
+	height: 100%;	
+}
+#wrapper {
+	min-height: 100%;	
+}
+/* ---------------------------
+	  Fonts
+--------------------------- */
+/* Logo */
+@font-face {
+	font-family: "Voltaire-Regular";
+	src: url("fonts/Voltaire-Regular.ttf");
+}
+/* Headers */
+@font-face {
+	font-family: "AbrilFatface-Regular";
+	src: url("fonts/AbrilFatface-Regular.ttf");
+}
+
+
+/* ---------------------------
+	  pages
+--------------------------- */
+.blog #login {
+	margin-top: 1em;	
+}
+/* ---------------------------
+	  Blog Layout
+--------------------------- */
+
+.blog .head {
+	background-color: #000;
+	overflow: hidden;
+	margin-bottom: 2em;
+	text-align: center;
+}
+.blog .head .meta {
+	/* float: left; */
+	padding: .1em 20px;
+	font: 100 2em/1.4em "Voltaire-Regular", Georgia, "Times New Roman", Times, serif;
+}
+
+.blog .head a {
+	color: #fff;
+	text-decoration: none;
+	
+}
+
+.blog .head .meta .site {
+	font-weight: normal;
+	background: url(graphics/squid.gif) no-repeat right;
+	padding-right: 70px;
+	margin-right: 10px;
+	
+}
+.blog .head .meta .section {
+}
+.blog .head .meta .section a {
+	color: #999;
+}
+.blog .head .session {
+	font-family: Georgia, "Times New Roman", Times, serif;
+	color: #666;
+	display: block;
+	background-color: #ddd;
+	padding: .5em 20px .5em 1em;
+	font-style: italic;
+}
+.blog .head .session .user a{
+	color: #000;
+	font-weight: bold;
+	text-decoration: none;
+}
+.blog .head .meta .section a:hover,
+.blog .head .session a:hover,
+.blog .head a:hover,
+.footer a.site:hover {
+	color: #6dbad8;	
+}
+
+/* ---------------------------
+	  Footer
+--------------------------- */
+
+.footer {
+	/*  footer height is 90px in total */
+	text-align: center;
+	background-color: #000;
+	color: #fff;
+	padding: 20px 0;
+	margin-top: -100px;
+	height: 60px;
+	clear: both;
+	position: relative;
+}
+.footer .site {
+	font: 100 2em/1.4em "Voltaire-Regular", Georgia, "Times New Roman", Times, serif;	
+	display: block;
+	color: #fff;
+	text-decoration: none;
+}
+.footer .copyright {
+	color: #aaa;
+}
+
+/* ---------------------------
+	  Main Content Blocks
+--------------------------- */
+
+.blog .post,
+.blog .list,
+.blog .edit {
+	overflow: hidden;
+	max-width: 800px;
+	margin: -60px auto 0;
+	padding: 60px 20px 160px 20px;
+	
+}
+/*Opera Fix for sticky footer*/
+body:before {
+	content:"";
+	height:100%;
+	float:left;
+	width:0;
+	margin-top:-32767px;/
+}
+/* ---------------------------
+	  Blog List
+--------------------------- */
+.blog .list h1 {
+	border-bottom: 1px solid #000;
+	margin-bottom: .5em;	
+}
+.blog .list .posts {
+	margin-top: 1em;
+	list-style: none;
+	padding-left: 0;
+}
+.blog .list .posts .xfolkentry{
+		
+}
+.blog .list .posts .xfolkentry .taggedlink {
+	margin-bottom: .3em;
+		
+}
+.blog .list .posts .xfolkentry .taggedlink a{
+	color: #333;
+}
+.blog .list .posts .xfolkentry .date {
+	color: #777;
+}
+.blog .list .posts .xfolkentry .description {
+	margin-bottom: 2em;
+}
+.blog .list .page-nav {
+	overflow: hidden;	
+}
+.blog .list .page-nav .next,
+.blog .list .page-nav .prev {
+	display: block;
+	text-decoration: none;
+	float: left;
+	margin-right: 1em;
+	background-color: #000;
+	padding: .3em 1em;
+	color: #fff;
+	border: 1px solid #000;
+}
+.blog .list .page-nav .next:hover,
+.blog .list .page-nav .prev:hover {
+	background-color: #aaa;
+	border: 1px solid #000;
+	color: #000;	
+}
+
+/* ---------------------------
+	  Blog Post
+--------------------------- */
+
+.blog .post .description{
+	font: oblique 100 1.2em/1.5em Helvetica, Arial, "Lucida Grande", sans-serif;
+	color: #666;
+	border-bottom: 1px solid #999;
+	margin-bottom: 2em;
+	padding: 1em 0 2em;
+}
+.blog .post .date{
+	color: #444;
+	font-size: 1.1em;
+}
+.blog .post h1 {
+	font: 3em/1.1em "AbrilFatface-Regular", Helvetica, Arial, "Lucida Grande", sans-serif;
+}
+.blog .post img {
+	max-width: 100%;	
+}
+
+.blog .post .comments{
+
+}
+.blog h1, 
+.blog h2,
+.blog h3,
+.blog h4,
+.blog h5,
+.blog h6 {
+	font-family: "AbrilFatface-Regular", Georgia, "Times New Roman", Times, serif;	
+}
+
+/* ---------------------------
+	  Blog Comments
+--------------------------- */
+.blog .comments {
+	border-top: 1px solid #999;	
+	padding-top: 2em;
+	margin-top: 1em;
+}
+.blog .comments h2 {
+	padding-bottom: 1em;
+}
+/* ---------------------------
+	  Blog Edit
+--------------------------- */
+.blog form.post label {
+	background-color: #000;
+	color: #fff;
+	display: block;
+	font:900 1.5em/1.4em "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+	padding: .2em 1em;
+	margin-top: 2em;
+	border: 1px solid #000;
+}
+.blog form.post label .required{
+	float: right;
+}
+.blog form.post br {
+	display: none;	
+}
+.blog form.post #title {
+	width:98.7%;
+	margin-top: 1px;
+}
+.blog form.post #text {
+	width: 98.7%;
+	height: 30em;
+}
+.blog form.post #description {
+	width: 98.7%;
+	height: 4em;
+}
+.blog form.post #keywords {
+	width: 98.7%;
+}
+.blog form.post #category {
+
+}
+
+.blog form.post #tags {
+		
+}
+.blog form.post .admin {
+	margin-top: 2em;	
+}
+input, textarea {
+	padding: .3em;
+	border: 1px solid #000;
+}
+
+
+
+

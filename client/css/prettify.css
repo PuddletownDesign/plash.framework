@@ -1,0 +1,104 @@
+.prettyprint  {
+	font-size: .9em;
+	background-color: #222;
+	display: block;
+	overflow: auto;	
+	
+}
+.prettyprint code {
+	padding: 1em;
+	display: block;
+}
+.pln {
+	color: #6dbad8
+}
+@media screen { .str {
+	color: #fff
+}
+.kwd {
+	color: #de7d61
+}
+.com {
+	color: #478d4f
+}
+.typ {
+	color: #deca76
+}
+.lit {
+	color: #fff
+}
+.pun {
+	color: #fff;	
+}
+.opn,.clo {
+	color: #066
+}
+.tag {
+	color: #6dbad8
+}
+.atn {
+	color: #deca76
+}
+.atv {
+	color: #fff
+}
+.dec,.var {
+	color: #060
+}
+.fun {
+	color: blue
+}
+
+}
+@media print,projection { 
+
+.str {
+	color: #fff
+}
+.kwd {
+	color: #de7d61;
+	font-weight: bold
+}
+.com {
+	color: #478d4f;
+	font-style: italic
+}
+.typ {
+	color: #deca76;
+	font-weight: bold
+}
+.lit {
+color: #fff
+}
+.pun {
+	color: #fff;	
+}
+.opn,.clo {
+color: #044
+}
+.tag {
+color: #660;
+font-weight: bold
+}
+.atn {
+color: #040
+}
+.atv {
+color: #606
+}
+
+}
+pre.prettyprint {
+	padding: 2px;
+	border: 1px solid #eee
+}
+ol.linenums {
+	margin-top: 0;
+	margin-bottom: 0
+}
+li.L0,li.L1,li.L2,li.L3,li.L5,li.L6,li.L7,li.L8 {
+	list-style-type: none
+}
+li.L1,li.L3,li.L5,li.L7,li.L9 {
+	background: #111
+}

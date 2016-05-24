@@ -1,0 +1,294 @@
+<p><a href="http://en.wikipedia.org/wiki/Ajax_%28programming%29">AJAX</a> communication between the client browser and web server is a handy method of transferring data without forcing the user to refresh the page.  Typically, the data sent to the server is a simple set of form fields or flags.  However, it is also possible to submit more complex structured data.  This tutorial will demonstrate 4 different methods used to pass multidimensional javascript arrays using <a href="http://jquery.com/">jQuery</a> and AJAX to a <a href="http://www.php.net/">PHP</a> web server.</p>
+<h2>UPDATE: The Easy Way... for jQuery 1.4.0+</h2>
+<p>Thanks to Pirumpi for pointing out that jQuery 1.4.0 now <a href="http://api.jquery.com/jQuery.param/">automatically serializes arrays and objects parameters</a> for AJAX functions.  That means it's super easy to pass them to PHP:</p>
+<pre class="brush: xml; first-line: 1; gutter: true;">
+&lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD XHTML 1.0 Transitional//EN&quot; &quot;http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd&quot;&gt;
+&lt;html xmlns=&quot;http://www.w3.org/1999/xhtml&quot; dir=&quot;ltr&quot; lang=&quot;en-US&quot;&gt;
+    &lt;head profile=&quot;http://gmpg.org/xfn/11&quot;&gt;
+        &lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=UTF-8&quot; /&gt;
+        &lt;title&gt;jQuery AJAX arrays&lt;/title&gt;
+        &lt;script type=&quot;text/javascript&quot; src=&quot;//ajax.googleapis.com/ajax/libs/jquery/1.4.0/jquery.js&quot;&gt;&lt;/script&gt;
+        &lt;script type=&quot;text/javascript&quot;&gt;
+                sendAjax = function(){
+                    var data = {
+                                  foo:  123,
+                                  bar:  456,
+                                  rows: [
+                                          {
+                                            column1 : 'hello',
+                                            column2 : 'hola',
+                                            column3 : 'bonjour',
+                                          },
+                                          {
+                                            column1 : 'goodbye',
+                                            column2 : 'hasta luego',
+                                            column3 : 'au revoir',
+                                          },
+                                        ],
+                                  test1:{
+                                          test2: {
+                                                   test3:  'baz'
+                                                 }
+                                        }
+                                };
+
+                    $.ajax({
+                            type:           'post',
+                            cache:          false,
+                            url:            './ajax/',
+                            data:           data
+                           });
+                }
+
+        &lt;/script&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+        &lt;input type=&quot;button&quot; style=&quot;width: 130px; height: 60px&quot; value=&quot;send AJAX&quot; onclick=&quot;sendAjax();&quot; /&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+</pre>
+<p>When the button is clicked, the following structured data shows up in PHP's $_POST variable:</p>
+<pre class="brush: plain;">
+Array
+(
+    [foo] =&gt; 123
+    [bar] =&gt; 456
+    [rows] =&gt; Array
+        (
+            [0] =&gt; Array
+                (
+                    [column1] =&gt; hello
+                    [column2] =&gt; hola
+                    [column3] =&gt; bonjour
+                )
+
+            [1] =&gt; Array
+                (
+                    [column1] =&gt; goodbye
+                    [column2] =&gt; hasta luego
+                    [column3] =&gt; au revoir
+                )
+
+        )
+
+    [test1] =&gt; Array
+        (
+            [test2] =&gt; Array
+                (
+                    [test3] =&gt; baz
+                )
+
+        )
+
+)
+</pre>
+<p>This will only work with jQuery 1.4.0+.  Otherwise jQuery simply calls .toString() on the nested array at key "rows" and nested object at key "test1", and they get passed to PHP with the useless values "[object Object]".</p>
+<p><b>NOTE:</b> The remainder of this article will demonstrate how to send objects and arrays for jQuery versions lower than 1.4.0.</p>
+<h2>Method 1 - Form input arrays</h2>
+<p>It's possible to name the keys of the JS array as HTML form input arrays (ie. named with square brackets) so that <a href="http://php.net/manual/en/language.variables.external.php">PHP decodes the array's key names as nested arrays</a>.  I don't recommend this method because it does not maintain the JS array's original structure in the Javascript.  However, it can be used if you just need to get the AJAX request working without using JSON.</p>
+<p>
+The original JS "data" array can be renamed/restructured as:
+</p>
+<pre class="brush: jscript;">
+sendAjax = function(){
+	var data = {
+				  foo:  123,
+				  bar:  456,
+				  'rows[0][column1]':    'hello',
+				  'rows[0][column2]':    'hola',
+				  'rows[0][column3]':    'bonjour',
+				  'rows[1][column1]':    'goodbye',
+				  'rows[1][column2]':    'hasta luego',
+				  'rows[1][column3]':    'au revoir',
+				  'test1[test2][test3]': 'baz'
+				};
+	$.ajax({
+			type:           'post',
+			cache:          false,
+			url:            './ajax/',
+			data:           data
+		   });
+}
+</pre>
+<p>And the data is correctly received in PHP's $_POST variable:</p>
+<pre class="brush: plain;">
+Array
+(
+    [foo] =&gt; 123
+    [bar] =&gt; 456
+    [rows] =&gt; Array
+        (
+            [0] =&gt; Array
+                (
+                    [column1] =&gt; hello
+                    [column2] =&gt; hola
+                    [column3] =&gt; bonjour
+                )
+
+            [1] =&gt; Array
+                (
+                    [column1] =&gt; goodbye
+                    [column2] =&gt; hasta luego
+                    [column3] =&gt; au revoir
+                )
+        )
+
+    [test1] =&gt; Array
+        (
+            [test2] =&gt; Array
+                (
+                    [test3] =&gt; baz
+                )
+        )
+)
+</pre>
+<h2>Method 2 - JSON string parameter</h2>
+<p>This method converts the JS array to a <a href="http://www.json.org/">JSON</a> string, and passes it as a POST or GET parameter, which can be manually decoded back into an array by PHP.  Modern browsers (Firefox 3, IE 8) now have a native JSON object that can be used to stringify JS arrays to JSON strings.  The following example uses the <a href="http://developer.yahoo.com/yui/json/">YUI JSON utility</a> to convert the JS array to a string ( <a href="http://www.json.org/json2.js">json2</a> is another populary lightweight utility for handling JSON).</p>
+<pre class="brush: jscript;">
+sendAjax = function(){
+	var data = {
+				  foo:  123,
+				  bar:  456,
+				  rows: [
+						  {
+							column1 : 'hello',
+							column2 : 'hola',
+							column3 : 'bonjour',
+						  },
+						  {
+							column1 : 'goodbye',
+							column2 : 'hasta luego',
+							column3 : 'au revoir',
+						  },
+						],
+				  test1:{
+						  test2: {
+								   test3:  'baz'
+								 }
+						}
+				};
+	data = YAHOO.lang.JSON.stringify(data);
+
+	$.ajax({
+			type:           'post',
+			cache:          false,
+			url:            './ajax/',
+			data:           {myJson:  data}
+		   });
+}
+</pre>
+<p>On the PHP side, it's necessary to use <a href="http://us2.php.net/manual/en/function.json-decode.php">json_decode()</a> to convert the JSON $_POST parameter string (named "myJson") to an array:</p>
+<pre class="brush: php;">
+&lt;?php
+$data = json_decode($_POST['myJson'], true);
+print_r($data);
+</pre>
+<p>And the array is good to go:</p>
+<pre class="brush: plain;">
+Array
+(
+    [foo] =&gt; 123
+    [bar] =&gt; 456
+    [rows] =&gt; Array
+        (
+            [0] =&gt; Array
+                (
+                    [column1] =&gt; hello
+                    [column2] =&gt; hola
+                    [column3] =&gt; bonjour
+                )
+
+            [1] =&gt; Array
+                (
+                    [column1] =&gt; goodbye
+                    [column2] =&gt; hasta luego
+                    [column3] =&gt; au revoir
+                )
+        )
+
+    [test1] =&gt; Array
+        (
+            [test2] =&gt; Array
+                (
+                    [test3] =&gt; baz
+                )
+        )
+)
+</pre>
+<h2>Method 3 - JSON content-type</h2>
+<p>My favorite method is to simply JSON stringify the JS array, and pass it as the AJAX request's body.  This requires that the content-type of the request be changed from the default "application/x-www-form-urlencoded" to "application/json", and that $.ajax()'s <a href="http://docs.jquery.com/Ajax/jQuery.ajax#options">processData</a> parameter be set to false so that the JSON data is not converted into a query string.  Also, the type of request must be POST, as the GET method does not support submitting data in the request body.</p>
+<pre class="brush: jscript;">
+sendAjax = function(){
+	var data = {
+				  foo:  123,
+				  bar:  456,
+				  rows: [
+						  {
+							column1 : 'hello',
+							column2 : 'hola',
+							column3 : 'bonjour',
+						  },
+						  {
+							column1 : 'goodbye',
+							column2 : 'hasta luego',
+							column3 : 'au revoir',
+						  },
+						],
+				  test1:{
+						  test2: {
+								   test3:  'baz'
+								 }
+						}
+				};
+	data = YAHOO.lang.JSON.stringify(data);
+
+	$.ajax({
+			type:           'post',
+			cache:          false,
+			url:            './ajax/',
+			data:           data,
+			processData:    false,
+			contentType:   'application/json'
+		   });
+}
+</pre>
+<p>On the PHP side, it's necessary to manually read the JSON string directly from the request body using the <a href="http://php.net/manual/en/wrappers.php.php">php://input</a> stream.  The returned string can then be decoded into an array:</p>
+<pre class="brush: php;">
+&lt;?php
+$data = file_get_contents('php://input');
+$data = json_decode($data, true);
+print_r($data);
+</pre>
+<p>Which gives us the array:</p>
+<pre class="brush: plain;">
+Array
+(
+    [foo] =&gt; 123
+    [bar] =&gt; 456
+    [rows] =&gt; Array
+        (
+            [0] =&gt; Array
+                (
+                    [column1] =&gt; hello
+                    [column2] =&gt; hola
+                    [column3] =&gt; bonjour
+                )
+
+            [1] =&gt; Array
+                (
+                    [column1] =&gt; goodbye
+                    [column2] =&gt; hasta luego
+                    [column3] =&gt; au revoir
+                )
+        )
+
+    [test1] =&gt; Array
+        (
+            [test2] =&gt; Array
+                (
+                    [test3] =&gt; baz
+                )
+        )
+)
+</pre>
+<p>Hopefully this tutorial has helped you get multidimensional array data passed to your webserver using AJAX.  If you know of another method, please submit it in the comments - thanks!</p>

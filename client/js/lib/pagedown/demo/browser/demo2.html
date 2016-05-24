@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+
+<html>
+
+    <head>
+        <title>PageDown Demo Page</title>
+        
+        <link rel="stylesheet" type="text/css" href="demo.css" />
+        
+        <script type="text/javascript" src="../../Markdown.Converter.js"></script>
+        <script type="text/javascript" src="../../Markdown.Sanitizer.js"></script>
+        <script type="text/javascript" src="../../Markdown.Editor.js"></script>
+    </head>
+    
+    <body>
+        
+        <div class="wmd-panel">
+            <div id="wmd-button-bar"></div>
+            <textarea class="wmd-input" id="wmd-input"></textarea>
+        </div>
+        <div id="wmd-preview" class="wmd-panel wmd-preview"></div>
+
+
+        <script type="text/javascript">
+            (function () {
+               
+                
+                var converter = new Markdown.Converter();
+
+                converter.hooks.chain("preConversion", function (text) {
+                    return text.replace(/\b(a\w*)/gi, "*$1*");
+                });
+
+                converter.hooks.chain("plainLinkText", function (url) {
+                    return "This is a link to " + url.replace(/^https?:\/\//, "");
+                });
+                
+                var help = function () { alert("Do you need help?"); }
+                
+                var editor = new Markdown.Editor(converter, null, { handler: help });
+                
+                editor.run();
+            })();
+        </script>
+    </body>
+</html>
